@@ -1,7 +1,9 @@
 <?php
 
+use App\Http\Controllers\Admin\RoomRateController;
 use Illuminate\Support\Facades\Route;
 use Livewire\Volt\Volt;
+use App\Livewire\RoomRate;
 
 Route::get('/', function () {
     return view('welcome');
@@ -10,6 +12,10 @@ Route::get('/', function () {
 Route::view('dashboard', 'dashboard')
     ->middleware(['auth', 'verified'])
     ->name('dashboard');
+
+Route::get('rates',[RoomRateController::class,'index'])->name('rates');
+Route::get('roomrate',RoomRate::class);
+
 
 Route::middleware(['auth'])->group(function () {
     Route::redirect('settings', 'settings/profile');
