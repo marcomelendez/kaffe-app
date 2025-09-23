@@ -42,16 +42,15 @@ class Room extends Model
 
         return BookableUnit::whereIn('bookable_id', $unitAdultIds)
             ->where('bookable_type', UnitRoomAdult::class)
-            ->pluck('bookable_id');
+            ->get();
     }
 
     public function getBookableIdsThroughUnitChildren(): \Illuminate\Support\Collection
     {
         $unitChildIds = $this->unitChildren()->pluck('id');
 
-
         return BookableUnit::whereIn('bookable_id', $unitChildIds)
             ->where('bookable_type', UnitRoomChild::class)
-            ->pluck('bookable_id');
+            ->get();
     }
 }

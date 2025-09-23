@@ -1,10 +1,8 @@
-<div>
-    <div><flux:button variant="primary" wire:navigate href="/roomrate">Nueva tarifa</flux:button></div>
-    <div id="calendar" wire:ignore></div>
-</div>
+<div id="calendar" wire:ignore></div>
+
 @push('scripts')
 <script>
-    document.addEventListener('DOMContentLoaded', function () {
+    document.addEventListener('init-calendar', function () {
     const calendarEl = document.getElementById('calendar');
     const calendar = new window.FullCalendar.Calendar(calendarEl, {
       plugins: window.FullCalendar.plugins,

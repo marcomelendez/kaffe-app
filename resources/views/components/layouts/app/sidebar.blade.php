@@ -14,7 +14,7 @@
             <flux:navlist variant="outline">
                 <flux:navlist.group :heading="__('Platform')" class="grid">
                     <flux:navlist.item icon="home" :href="route('dashboard')" :current="request()->routeIs('dashboard')" wire:navigate>{{ __('Dashboard') }}</flux:navlist.item>
-                    <flux:navlist.item icon="percent-badge" :href="route('rates')" :current="request()->routeIs('rates')" wire:navigate>{{ __('rates') }}</flux:navlist.item>
+                    <flux:navlist.item icon="percent-badge" :href="route('properties.index')" :current="request()->routeIs('properties.index')" wire:navigate>{{ __('Properties') }}</flux:navlist.item>
                 </flux:navlist.group>
             </flux:navlist>
 

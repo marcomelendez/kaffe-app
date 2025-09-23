@@ -20,20 +20,27 @@ class RoomRate
         }
 
         return $rooms;
+    }
 
+    public function getBookableUnits(int $id)
+    {
+        $roomUnits = $this->getByProperty($id);
 
-        // foreach ($rooms as $room) {
-        //     foreach ($room['unit_adults'] as $unitAdult) {
+        foreach ($roomUnits as $key => $value) {
 
-        //         $bookable = BookableUnit::find($unitAdult);
-        //         // $valuate = $bookable->getPriceValue(new \DateTime('now'), new \DateTime('+ 3  days'));
+            $unitAdults = $value['unit_adults']->map(function ($item) {
+                return $item->id;
+            })->toArray();
 
-        //         // dd($valuate);
+            $unitChildren = $value['unit_children']->map(function ($item) {
+                return $item->id;
+            })->toArray();
 
-        //         $bookable->saveEventDaily(new \DateTime('now'), new \DateTime('+ 10  days'), 100);
+            $bookableUnits = BookableUnit::whereIn('id', array_merge($unitAdults,$unitChildren))->get();
+            $units[] = $bookableUnits;
+        }
 
-        //         exit;
-        //     }
-        // }
+        return $units;
+
     }
 }
