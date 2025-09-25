@@ -248,7 +248,7 @@ class BookableUnit extends Model
      */
     private function getPriceValuator($startDate, $endDate, string $durationUnit = 'P1D'): Valuator
     {
-        $store = new SqlLiteDBStore($this->batConnection, self::BAT_PRICING, SqlLiteDBStore::BAT_STATE);
+        $store = new SqlLiteDBStore($this->batConnection, self::BAT_PRICING, SqlLiteDBStore::BAT_EVENT);
         $valuator = new Valuator($startDate, $endDate, $this->getBatUnit('pricing'), $store, new \DateInterval($durationUnit));
 
         return $valuator;

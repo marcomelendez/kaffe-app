@@ -13,6 +13,7 @@ window.initFlatpickr = function (selector, callback) {
 	flatpickr(selector, {
 		mode: 'range',
 		dateFormat: 'd/m/Y',
+		minDate: 'today',
 		onChange: function (selectedDates) {
 			if (selectedDates.length === 2) {
 				callback({
