@@ -18,15 +18,19 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Astrotomic\Translatable\Contracts\Translatable as TranslatableContract;
 use Astrotomic\Translatable\Translatable;
 
+
 use Illuminate\Support\Facades\Storage;
+use Spatie\MediaLibrary\HasMedia;
+use Spatie\MediaLibrary\InteractsWithMedia;
 use URL;
 
-class Property extends Model implements TranslatableContract
+class Property extends Model implements TranslatableContract, HasMedia
 {
     // use LoggableTrait;
     // use VisitableTrait;
     use HasFactory;
     use Translatable;
+    use InteractsWithMedia;
 
     protected $rates = [];
 
@@ -411,7 +415,7 @@ class Property extends Model implements TranslatableContract
         return $this->belongsTo('App\Models\Province', 'cpro', 'code');
     }
 
-    public function plan()
+    public function plans()
     {
         return $this->belongsToMany(Plan::class);
     }
