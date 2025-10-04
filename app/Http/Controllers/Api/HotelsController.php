@@ -9,10 +9,6 @@ use Illuminate\Http\Request;
 
 class HotelsController extends Controller
 {
-
-    CONST TOP_HOTELS_3 = [1,5,6];
-
-
     public function index()
     {
         return response()->apiSuccess(Property::paginate()->toResourceCollection(), 'Hoteles Listados');
@@ -31,7 +27,8 @@ class HotelsController extends Controller
 
     public function top_three()
     {
-        $properties = Property::whereIn('id', self::TOP_HOTELS_3)->get();
+        $topHotels3 = explode(',', env('TOP_HOTELS_3', '1,43,52'));
+        $properties = Property::whereIn('id', $topHotels3)->get();
         return response()->apiSuccess($properties->toResourceCollection(), 'Top 3 Hoteles Listados');
     }
 }
