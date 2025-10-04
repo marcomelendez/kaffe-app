@@ -17,7 +17,8 @@ Route::get('/user', function (Request $request) {
 
 
 Route::get('/hotels', [HotelsController::class, 'index']);
-Route::get('/hotel/{id}', [HotelsController::class, 'show']);
+Route::get('/hotels-top-3',[HotelsController::class,'top_three']);
+Route::get('/hotel/{slug}', [HotelsController::class, 'show']);
 
 
 

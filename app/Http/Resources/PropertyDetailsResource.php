@@ -28,6 +28,8 @@ class PropertyDetailsResource extends JsonResource
                //s 'thumb' => $media->getUrl('thumb'),
                 'name' => $media->name,
             ]),
+            'amenities'=>AmenityResource::collection($this->amenities),
+            'rooms'=>RoomResource::collection($this->roomsAll),
         ];
     }
 }

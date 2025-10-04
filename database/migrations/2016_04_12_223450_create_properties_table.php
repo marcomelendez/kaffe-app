@@ -99,6 +99,9 @@
                 $table->boolean('published')->default(false);
                 $table->boolean('recommended')->default(false);
                 $table->boolean('active')->default(false);
+                $table->string('main_photo_lg')->nullable();
+                $table->string('main_photo_md')->nullable();
+                $table->string('main_photo_sm')->nullable();
                 $table->softDeletes();
                 $table->timestamps();
             });

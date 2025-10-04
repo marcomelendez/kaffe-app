@@ -22,7 +22,10 @@ class PropertyResource extends JsonResource
             'slug'=>$this->slug,
             'latlng'=>$this->latlng,
             'direction'=>$this->translate('es')->directions ?? '',
-            'plans'=>PlanResource::collection($this->plans)
+            'plans'=>PlanResource::collection($this->plans),
+            'main_photo_lg'=>$this->main_photo_lg,
+            'main_photo_md'=>$this->main_photo_md,
+            'main_photo_sm'=>$this->main_photo_sm,
         ];
     }
 }
