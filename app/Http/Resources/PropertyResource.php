@@ -26,6 +26,8 @@ class PropertyResource extends JsonResource
             'main_photo_lg'=>$this->main_photo_lg,
             'main_photo_md'=>$this->main_photo_md,
             'main_photo_sm'=>$this->main_photo_sm,
+            'rating'=>$this->rating,
+            'stars'=>$this->stars,
         ];
     }
 }

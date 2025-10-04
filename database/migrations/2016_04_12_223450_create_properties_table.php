@@ -102,6 +102,8 @@
                 $table->string('main_photo_lg')->nullable();
                 $table->string('main_photo_md')->nullable();
                 $table->string('main_photo_sm')->nullable();
+                $table->tinyInteger('rating')->default(0);
+                $table->tinyInteger('stars')->default(0);
                 $table->softDeletes();
                 $table->timestamps();
             });

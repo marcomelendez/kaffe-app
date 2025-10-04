@@ -30,6 +30,11 @@ class PropertyDetailsResource extends JsonResource
             ]),
             'amenities'=>AmenityResource::collection($this->amenities),
             'rooms'=>RoomResource::collection($this->roomsAll),
+            'rating'=>$this->rating,
+            'main_photo_lg'=>$this->main_photo_lg,
+            'main_photo_md'=>$this->main_photo_md,
+            'main_photo_sm'=>$this->main_photo_sm,
+            'stars'=>$this->stars,
         ];
     }
 }
