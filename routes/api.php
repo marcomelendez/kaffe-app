@@ -23,3 +23,4 @@ Route::get('/hotel/{slug}', [HotelsController::class, 'show']);
 
 
 Route::post('/upload-media-test', [UtilsController::class, 'uploadImageProperty']);
+Route::post('/upload-media/{propertyId}', [UtilsController::class, 'uploadImageByProperty']);

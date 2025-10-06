@@ -4,6 +4,7 @@ namespace App\Http\Resources;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Support\Facades\Storage;
 
 class PropertyDetailsResource extends JsonResource
 {
@@ -21,7 +22,7 @@ class PropertyDetailsResource extends JsonResource
             'description'=> $this->translate('es')->description ?? '',
             'slug'=>$this->slug,
             'latlng'=>$this->latlng,
-            'direction'=>$this->translate('es')->directions ?? '',
+            'direction'=>$this->location->getLocation() ?? '',
             'plans'=>PlanResource::collection($this->plans),
             'images' => $this->getMedia('hotels')->map(fn($media) => [
                 'url' => $media->getUrl(),
@@ -31,9 +32,9 @@ class PropertyDetailsResource extends JsonResource
             'amenities'=>AmenityResource::collection($this->amenities),
             'rooms'=>RoomResource::collection($this->roomsAll),
             'rating'=>$this->rating,
-            'main_photo_lg'=>$this->main_photo_lg,
-            'main_photo_md'=>$this->main_photo_md,
-            'main_photo_sm'=>$this->main_photo_sm,
+            'main_photo_lg'=> $this->main_photo_lg ? Storage::disk('s3')->url($this->main_photo_lg) : null,
+            'main_photo_md'=>$this->main_photo_md ? Storage::disk('s3')->url($this->main_photo_md) : null,
+            'main_photo_sm'=>$this->main_photo_sm ? Storage::disk('s3')->url($this->main_photo_sm) : null,
             'stars'=>$this->stars,
         ];
     }

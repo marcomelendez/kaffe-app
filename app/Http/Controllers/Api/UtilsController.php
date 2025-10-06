@@ -6,6 +6,11 @@ use App\Http\Controllers\Controller;
 use App\Models\Property;
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
+
+use Intervention\Image\ImageManager;
+use Intervention\Image\Drivers\Imagick\Driver;
+use Intervention\Image\Encoders\JpegEncoder;
 
 class UtilsController extends Controller
 {
@@ -77,5 +82,71 @@ class UtilsController extends Controller
             'file_name' => "FINO",
             's3_url' => "URL", // La URL generada de S3 (debería funcionar si la config. es correcta)
         ]);
+    }
+
+    public function uploadImageByProperty(Request $request, int $propertyId)
+    {
+
+        $property = Property::find($propertyId);
+
+        if (!$property) {
+            return response()->json(['error' => 'Propiedad no encontrada.'], 404);
+        }
+
+        // 1. Validar archivos
+        $fields = ['main_photo_lg', 'main_photo_md', 'main_photo_sm'];
+        foreach ($fields as $field) {
+            if (!$request->hasFile($field)) {
+                return response()->json(['error' => "No se encontró el archivo: $field"], 400);
+            }
+        }
+
+        // 2. Inicializar ImageManager
+        $manager = new ImageManager(new Driver());
+
+        // 3. Definir tamaños (puedes cambiarlos)
+        $sizes = [
+            'main_photo_lg' => 1200,
+            'main_photo_md' => 800,
+            'main_photo_sm' => 400,
+        ];
+
+        // 4. Procesar y subir cada imagen
+        $uploadedPaths = [];
+        foreach ($fields as $field) {
+            $uploadedFile = $request->file($field);
+
+            // Leer y manipular la imagen
+            $image = $manager->read(file_get_contents($uploadedFile->getRealPath()));
+            $image->resize($sizes[$field], null, function ($constraint) {
+                $constraint->aspectRatio();
+            })->sharpen(5);
+
+            // Codificar en JPG con calidad 80
+            $encodedImage = $image->encode(new JpegEncoder(quality: 80));
+
+            // Nombre único
+            $nameHash = uniqid($field . '_' . time(), true) . '.jpg';
+            $rutaS3 = "hotels/{$nameHash}";
+
+            $property->$field = $rutaS3;
+
+            // Subir a S3
+            Storage::disk('s3')->put(
+                $rutaS3,
+                (string) $encodedImage,
+                'public'
+            );
+
+            $uploadedPaths[$field] = $rutaS3;
+        }
+
+
+        $property->save();
+
+        return response()->json([
+            'message' => '¡Imágenes subidas con éxito!',
+            'paths' => $uploadedPaths
+        ], 200);
     }
 }

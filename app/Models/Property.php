@@ -467,4 +467,9 @@ class Property extends Model implements TranslatableContract, HasMedia
     {
         return $this->rates;
     }
+
+    public function scopeActive($query)
+    {
+        return $query->where('active', 1);
+    }
 }

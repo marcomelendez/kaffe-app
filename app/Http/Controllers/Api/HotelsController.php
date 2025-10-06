@@ -11,12 +11,12 @@ class HotelsController extends Controller
 {
     public function index()
     {
-        return response()->apiSuccess(Property::paginate()->toResourceCollection(), 'Hoteles Listados');
+        return response()->apiSuccess(Property::active()->paginate(20)->toResourceCollection(), 'Hoteles Listados');
     }
 
-    public function show($id)
+    public function show($slug)
     {
-        $property = Property::where('slug', $id)->first();
+        $property = Property::where('slug', $slug)->first();
 
         if (!$property) {
             return response()->apiError('property not found', 404);
