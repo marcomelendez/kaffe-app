@@ -106,8 +106,8 @@ class UtilsController extends Controller
 
         // 3. Definir tamaños (puedes cambiarlos)
         $sizes = [
-            'main_photo_lg' => 1200,
-            'main_photo_md' => 800,
+            'main_photo_lg' => 1920,
+            'main_photo_md' => 600,
             'main_photo_sm' => 400,
         ];
 
@@ -127,7 +127,7 @@ class UtilsController extends Controller
 
             // Nombre único
             $nameHash = uniqid($field . '_' . time(), true) . '.jpg';
-            $rutaS3 = "hotels/{$nameHash}";
+            $rutaS3 = "hotels/" . $property->id . "/" . $nameHash;
 
             $property->$field = $rutaS3;
 
