@@ -3,83 +3,64 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Models\DominioProducto;
+use App\Models\Photo;
 use App\Models\Property;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
-
+use Illuminate\Support\Facades\Validator;
 use Intervention\Image\ImageManager;
 use Intervention\Image\Drivers\Imagick\Driver;
 use Intervention\Image\Encoders\JpegEncoder;
 
 class UtilsController extends Controller
 {
-    public function uploadImageProperty()
+    public function uploadImageProperty(Request $request)
     {
-        // 1. Configuración y limpieza (OPCIONAL pero útil para pruebas)
-        // Asegúrate de usar un disco compatible con Spatie (ej. 's3' o 'public')
-        // El 's3' es el que has estado configurando.
         config(['filesystems.default' => 's3']);
 
-        // 2. Simular la creación de un archivo de imagen en memoria/temporal
-        // NOTA: Esto no lee un archivo real, sino que crea un archivo falso para la prueba.
+
+        $validator = Validator::make($request->all(), [
+            'images'   => 'required|array|min:1',
+            'images.*' => 'image|mimes:jpg,jpeg,png|max:2048',
+            'property_id' => 'required|integer|exists:properties,id',
+        ]);
 
 
-        // 3. Obtener el modelo al que adjuntar el archivo (ej. el primer usuario)
-        // Reemplaza 'User::first()' con el modelo real que uses (ej. Post::first() o Product::find(1))
+        // 1. Captura el fallo y devuelve tu respuesta personalizada
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => 'error',
+                'custom_message' => 'Ocurrieron errores al validar los datos de las imágenes.',
+                'validation_errors' => $validator->errors() // Muestra los errores detallados
+            ], 422);
+        }
 
-        $properties = Property::query('id', '<', 54)->get();
 
-        if (!$properties) {
+        $id = $request->input('property_id');
+        $property = Property::find($id);
+
+        if (!$property) {
             return response()->json(['error' => 'No se encontró el modelo para adjuntar el archivo.'], 404);
         }
 
-        foreach ($properties as $property) {
-            // $dominioProducto = DominioProducto::query('producto_id', $property->id)->first();
+        foreach ($request->file('images') as $file) {
 
-            // $photos = Photo::query('imageable_type', 'App\Models\Dominios_productos')
-            //     ->where('imageable_id', $dominioProducto->id)
-            //     ->get();
-
-            $photos = [];
-
-            foreach ($photos as $photo) {
-
-                //$new_uuid = (string) Str::uuid();
-                $photoPath = public_path("original/" . $photo->filename);
-
-                if (file_exists($photoPath)) {
-
-                    try {
-
-                        $property->addMedia($photoPath)
-                            ->usingFileName($photo->filename)
-                            ->preservingOriginal()
-                            ->toMediaCollection('hotels', 's3');
-                    } catch (Exception $e) {
-                        dd($e->getMessage());
-                    }
-                }
-
-
-                // 4. Adjuntar el archivo usando Spatie Media Library
-                // $media = $property
-                //     ->addMedia($dummyFile)
-                //     ->toMediaCollection('images'); // 'images' es el nombre de la colección
+            try {
+                $property->addMedia($file)
+                    ->usingFileName($file->getClientOriginalName())
+                    ->toMediaCollection('hotels', 's3');
+            } catch (Exception $e) {
+                return response()->json(['error' => 'Error al subir la imagen.'], 500);
             }
         }
-
-
-        // 4. Adjuntar el archivo usando Spatie Media Library
-        // $media = $model
-        //     ->addMedia($dummyFile)
-        //     ->toMediaCollection('images'); // 'images' es el nombre de la colección
 
         // 5. Respuesta
         return response()->json([
             'message' => '¡Imagen de prueba subida con éxito a S3 usando Media Library!',
             'media_id' => 1,
-            'file_name' => "FINO",
+            'file_name' => "OK",
             's3_url' => "URL", // La URL generada de S3 (debería funcionar si la config. es correcta)
         ]);
     }
