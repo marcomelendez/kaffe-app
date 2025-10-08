@@ -11,7 +11,7 @@ class HotelsController extends Controller
 {
     public function index()
     {
-        return response()->apiSuccess(Property::active()->paginate(20)->toResourceCollection(), 'Hoteles Listados');
+        return response()->apiSuccess(Property::active()->paginate(39)->toResourceCollection(), 'Hoteles Listados');
     }
 
     public function show($slug)
