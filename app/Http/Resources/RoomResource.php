@@ -20,7 +20,8 @@ class RoomResource extends JsonResource
                 'code' => $this->code,
                 'name' => $this->name,
                 'description' => $this->description,
-                'status' => $this->status
+                'max_children' => $this->max_children,
+                'capacity' => $this->total_capacity,
 
             ];
         } catch (\Exception $e) {

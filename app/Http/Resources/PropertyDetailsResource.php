@@ -30,7 +30,7 @@ class PropertyDetailsResource extends JsonResource
                 'name' => $media->name,
             ]),
             'amenities'=>AmenityResource::collection($this->amenities),
-            'rooms'=>RoomResource::collection($this->roomsAll),
+            'rooms'=>RoomResource::collection($this->roomsAll()->active()->get()),
             'rating'=>$this->rating,
             'main_photo_lg'=> $this->main_photo_lg ? Storage::disk('s3')->url($this->main_photo_lg) : null,
             'main_photo_md'=>$this->main_photo_md ? Storage::disk('s3')->url($this->main_photo_md) : null,

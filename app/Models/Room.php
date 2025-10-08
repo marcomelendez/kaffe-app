@@ -53,4 +53,9 @@ class Room extends Model
             ->where('bookable_type', UnitRoomChild::class)
             ->get();
     }
+
+    public function scopeActive()
+    {
+        return $this->where('status', 1);
+    }
 }
