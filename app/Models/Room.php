@@ -54,8 +54,8 @@ class Room extends Model
             ->get();
     }
 
-    public function scopeActive()
+    public function scopeActive($query)
     {
-        return $this->where('status', 1);
+        return $query->where('status', 1);
     }
 }

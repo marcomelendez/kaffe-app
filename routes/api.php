@@ -1,14 +1,10 @@
 <?php
 
-use App\Models\DominioProducto;
-use App\Models\Photo;
-use App\Models\Property;
+
 use Illuminate\Http\Request;
-use Illuminate\Http\UploadedFile;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
-use Illuminate\Support\Str;
 use App\Http\Controllers\Api\HotelsController;
+use App\Http\Controllers\Api\PackagesController;
 use App\Http\Controllers\Api\UtilsController;
 
 Route::get('/user', function (Request $request) {
@@ -19,6 +15,9 @@ Route::get('/user', function (Request $request) {
 Route::get('/hotels', [HotelsController::class, 'index']);
 Route::get('/hotels-top-3',[HotelsController::class,'top_three']);
 Route::get('/hotel/{slug}', [HotelsController::class, 'show']);
+
+Route::get('/packages', [PackagesController::class, 'index']);
+Route::get('/packages-top-5', [PackagesController::class, 'top_five']);
 
 
 Route::post('/upload-gallery', [UtilsController::class, 'uploadImageProperty']);
